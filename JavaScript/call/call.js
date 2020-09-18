@@ -7,13 +7,13 @@ function fn2() {
 }
 
 /**
- *
+ *  ES3写法
  */
-
 Function.prototype.call = function (context) {
   // call 函数会接收一个 上下文 参数
-  // 判断是否传递上下文对象，如果没有则使用 window 对象
-  // 为了在 context 上保存当前 this，使用 Object(context) ， 相当于 {}.fn
+  // 判断是否传递上下文对象，如果没有传递，是 null 或者 undefined 则指向 window
+  // 如果 this 传递的是基本数据类型，用 Object() 转换
+  // 使用 Object(context) ， 相当于 {}.fn
   context = context ? Object(context) : window;
   context.fn = this;
 
@@ -31,6 +31,19 @@ Function.prototype.call = function (context) {
   // 清除保存的 this
   delete context.fn;
 
+  return r;
+};
+
+/**
+ * ES6 写法
+ */
+Function.prototype.call = (context) => {
+  let context = context ? Object(context) : window;
+  context[fn] = this;
+
+  let args = [...arguments].slice(1);
+  let r = context[fn](...args);
+  delete context[fn];
   return r;
 };
 
