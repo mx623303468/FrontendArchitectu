@@ -11,6 +11,7 @@ export default {
   },
   plugins: [
     babel({
+      babelHelpers: "bundled",
       exclude: "node_modules/**",
     }),
     serve({
